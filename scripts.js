@@ -8,35 +8,35 @@ const ranges= player.querySelectorAll('.player__slider');
 
 
 const playerObject = {
-  togglePlay: function() {
+  togglePlay: () => {
     const startStop = video.paused ? 'play' : 'pause';
     video[startStop]();
   },
-  updateButton: function() {
-    const icon = this.paused ? '►' : '❚❚';
+  updateButton: (e) => {
+    const icon = e.currentTarget.paused ? '►' : '❚❚';
     toggle.textContent = icon;
   },
   // Skip forward or backward when skip buttons are clicked:
-  skip: function() {
+  skip: (e) => {
     // Converts the data-skip attribute into a number and adds it to the current time:
-    video.currentTime += parseFloat(this.dataset.skip);
+    video.currentTime += parseFloat(e.currentTarget.dataset.skip);
   },
   // Adjust playback rate or volume:
-  handleRangeUpdate: function() {
-    video[this.name] = this.value;
+  handleRangeUpdate: (e) => {
+    video[e.currentTarget.name] = e.currentTarget.value;
   },
   // Show percentage of movie played:
-  handleProgress: function() {
+  handleProgress: () => {
     // Calculate progress:
     const percent = (video.currentTime / video.duration) * 100;
     progressBar.style.flexBasis = `${percent}%`;
   },
-  scrub: function(e) {
+  scrub: (e) => {
     const scrubTime = (e.offsetX / progress.offsetWidth) * video.duration;
     // Update the video to match scrubTime:
     video.currentTime = scrubTime;
   },
-  init: function() {
+  init: () => {
     // When video element is clicked, start or stop playback:
     video.addEventListener('click', playerObject.togglePlay);
 
@@ -60,7 +60,7 @@ const playerObject = {
     let mousedown = false;
     progress.addEventListener('click', playerObject.scrub);
     // If the mouse is down, run scrub function:
-    progress.addEventListener('mousemove', (e) => mousedown && scrub(e));
+    progress.addEventListener('mousemove', (e) => mousedown && playerObject.scrub(e));
     progress.addEventListener('mousedown', () => mousedown = true);
     progress.addEventListener('mouseup', () => mousedown = false);
   }
